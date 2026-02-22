@@ -91,7 +91,7 @@ export function Header({
           </div>
           {/* header content */}
           <div
-            className={`flex items-center justify-between px-4 sm:px-6 transition-all duration-300 ease-in-out ${scrolled ? 'py-3 sm:py-4' : 'py-4 sm:py-6'}`}
+            className={`flex items-center justify-between px-4 sm:px-6 transition-all duration-300 ease-in-out ${scrolled ? 'py-3 sm:py-4' : 'sm:py-4'}`}
           >
             {/* Mobile menu */}
             <div className="lg:hidden">

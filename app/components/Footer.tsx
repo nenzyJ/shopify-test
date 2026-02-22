@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
+import {Await, Form, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 
 interface FooterProps {
@@ -17,14 +17,71 @@ export function Footer({
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
+          <footer className="bg-brand-navy text-white">
+            {/* signup section */}
+            <div className="border-b border-white/10 ">
+              <div className="container mx-auto px-4 py-12">
+                <div className="max-w-xl mx-auto text-center">
+                  <h2 className="text-2xl font-bold mb-4">Stay Updated</h2>
+                  <p className="text-sm text-gray-300 mb-6">
+                    Subscribe to our newsletter for the latest updates and
+                    offers.
+                  </p>
+                  <Form
+                    className="flex gap-4"
+                    method="post"
+                    action="/newsletter"
+                  >
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      className="flex-1 px-4 py-3 border bg-white/20 placeholder:text-gray-400 text-white rounded-md"
+                    />
+                    <button
+                      className="px-6 py-3 bg-brand-gold text-white rounded-md text-sm hover:bg-brand-goldDark transition-colors duration-300"
+                      type="submit"
+                    >
+                      Subscribe
+                    </button>
+                  </Form>
+                </div>
+              </div>
+            </div>
+            {/* main cocntent */}
+              <div className="container mx-auto px-4 py-12">
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12'>
+                  {/* brand */}
+                    <div>
+
+                    </div>
+                  {/* contact */}
+                    <div>
+                      
+                    </div>
+                  {/* quick links */}
+                    <div>
+                      
+                    </div>
+                  {/* social */}
+                    <div>
+                      
+                    </div>
+                </div>
+              </div>
+            {/* copyright */}
+            <div className="border-t border-white/10 ">
+              <div className="container mx-auto px-4 py-12">
+                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                  <p className="text-sm text-gray-300">
+                    &copy; {new Date().getFullYear()} Tutor. All rights reserved.
+                  </p>
+                  <p className="text-sm text-gray-300">
+                    Powered by <span className="text-brand-gold">Tutor</span>
+                  </p>
+                </div>
+              </div>
+            </div>
           </footer>
         )}
       </Await>
