@@ -1,3 +1,11 @@
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapIcon,
+  Phone,
+} from 'lucide-react';
 import {Suspense} from 'react';
 import {Await, Form, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
@@ -49,32 +57,112 @@ export function Footer({
               </div>
             </div>
             {/* main cocntent */}
-              <div className="container mx-auto px-4 py-12">
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12'>
-                  {/* brand */}
-                    <div>
-
-                    </div>
-                  {/* contact */}
-                    <div>
-                      
-                    </div>
-                  {/* quick links */}
-                    <div>
-                      
-                    </div>
-                  {/* social */}
-                    <div>
-                      
-                    </div>
+            <div className="container mx-auto px-4 py-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                {/* brand */}
+                <div className="space-y-6">
+                  <h3 className="text-2xl uppercase">Nenzy</h3>
+                  <p className="leading-relaxed text-sm text-gray-300">
+                    Your trusted learning partner for all your educational
+                    needs.
+                  </p>
+                  <div className="flex space-x-4">
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/30 hover:text-brand-gold transition-colors duration-300"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                    <a
+                      href="https://facebook.com"
+                      className="text-white/30 hover:text-brand-gold transition-colors duration-300"
+                    >
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                    <a
+                      href="https://linkedin.com"
+                      className="text-white/30 hover:text-brand-gold transition-colors duration-300"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  </div>
+                </div>
+                {/* contact */}
+                <div className="space-y-6">
+                  <h4 className="text-lg uppercase">Contact Us</h4>
+                  <ul className="space-y-4 text-sm text-gray-400">
+                    <li className="flex items-start space-x-3">
+                      <MapIcon className="w-5 h-5 mt-1 text-brand-gold flex-shrink-0" />
+                      <span>123 Education Street, Learning City</span>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <Phone className="w-5 h-5 mt-1 text-brand-gold flex-shrink-0" />
+                      <span>+1 (555) 123-4567</span>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <Mail className="w-5 h-5 mt-1 text-brand-gold flex-shrink-0" />
+                      <span>contact@tutor.com</span>
+                    </li>
+                  </ul>
+                </div>
+                {/* quick links */}
+                <div className="space-y-6">
+                  <h4 className="text-lg uppercase">Quick Links</h4>
+                  <ul className="space-y-4 text-sm">
+                    <li>
+                      <NavLink
+                        to="/colections/all"
+                        className="text-gray-300 hover:text-brand-gold transition-colors duration-300"
+                      >
+                        Products
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/pages/our-craft"
+                        className="text-gray-300 hover:text-brand-gold transition-colors duration-300"
+                      >
+                        Our Craft
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/pages/care-guide"
+                        className="text-gray-300 hover:text-brand-gold transition-colors duration-300"
+                      >
+                        Care Guide
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/pages/about-us"
+                        className="text-gray-300 hover:text-brand-gold transition-colors duration-300"
+                      >
+                        About Us
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+                {/* policies */}
+                <div className="space-y-6">
+                  <h4 className="text-lg uppercase">Policies</h4>
+                  <FooterMenu
+                    menu={footer?.menu}
+                    primaryDomainUrl={header.shop.primaryDomain.url}
+                    publicStoreDomain={publicStoreDomain}
+                  />
                 </div>
               </div>
+            </div>
             {/* copyright */}
             <div className="border-t border-white/10 ">
               <div className="container mx-auto px-4 py-12">
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                   <p className="text-sm text-gray-300">
-                    &copy; {new Date().getFullYear()} Tutor. All rights reserved.
+                    &copy; {new Date().getFullYear()} Tutor. All rights
+                    reserved.
                   </p>
                   <p className="text-sm text-gray-300">
                     Powered by <span className="text-brand-gold">Tutor</span>
@@ -99,28 +187,26 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="footer-menu" role="navigation">
-      {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        // if the url is internal, we strip the domain
+    <nav className="space-y-3 text-sm " role="navigation">
+      {menu?.items.map((item) => {
+        if (!item.url) {
+          return null;
+        }
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a href={url} key={item.id} rel="noopener noreferrer" target="_blank">
-            {item.title}
-          </a>
-        ) : (
+        return (
           <NavLink
+            className={({isActive}) =>
+              `block text-gray-300 hover:text-brand-gold transition-colors duration-300 ${isActive ? 'text-brand-gold' : ''}`
+            }
             end
             key={item.id}
-            prefetch="intent"
-            style={activeLinkStyle}
             to={url}
+            prefetch="intent"
           >
             {item.title}
           </NavLink>
@@ -128,59 +214,4 @@ function FooterMenu({
       })}
     </nav>
   );
-}
-
-const FALLBACK_FOOTER_MENU = {
-  id: 'gid://shopify/Menu/199655620664',
-  items: [
-    {
-      id: 'gid://shopify/MenuItem/461633060920',
-      resourceId: 'gid://shopify/ShopPolicy/23358046264',
-      tags: [],
-      title: 'Privacy Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/privacy-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633093688',
-      resourceId: 'gid://shopify/ShopPolicy/23358013496',
-      tags: [],
-      title: 'Refund Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/refund-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633126456',
-      resourceId: 'gid://shopify/ShopPolicy/23358111800',
-      tags: [],
-      title: 'Shipping Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/shipping-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633159224',
-      resourceId: 'gid://shopify/ShopPolicy/23358079032',
-      tags: [],
-      title: 'Terms of Service',
-      type: 'SHOP_POLICY',
-      url: '/policies/terms-of-service',
-      items: [],
-    },
-  ],
-};
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
-  };
 }
