@@ -6,7 +6,8 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
-import {ProductItem} from '~/components/ProductItem';
+import ProductItem, { PRODUCT_ITEM_FRAGMENT } from '~/components/ProductItem';
+import {ArrowRight, Star} from 'lucide-react';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Hydrogen | Home'}];
@@ -60,8 +61,115 @@ export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+      {/* hero */}
+      <section className="relative h-screen main-h-[600px] bg-brand-navy">
+        <Image
+          className="absolute inset-0 w-full h-full object-cover opacity-70"
+          loading="eager"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 3vw"
+          data={{
+            url: '/image/handmade-shoes-boots.webp',
+            width: 1920,
+            height: 1080,
+          }}
+        />
+        <div className="relative max-w-[1440px] w-full mx-auto px-4 h-full flex items-center">
+          <div className="max-w-2x">
+            <h1 className="text-4xl md:text-6xl text-white mb-6">
+              Discover Unique Handmade Crafts
+            </h1>
+            <p className="text-lg text-gray-200 mb-8">
+              Explore our curated collection of artisanal products
+            </p>
+            <Link
+              to="/collections"
+              className="items-center font-medium inline-flex px-8 py-4 bg-brand-gold hover:bg-brand-goldDark transition-colors duration-300 text-white"
+            >
+              Explore collection
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
+          </div>
+        </div>
+      </section>
+      {/* recomended products */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto">
+          <h2 className='text-3xl text-center mb-12'>
+            Our latest product
+          </h2>
+          <div>
+            <Suspense
+              fallback={
+                <div>
+                  {Array.from({length: 4}).map((_, i) => (
+                    <div className="animate-pulse flex flex-wrap gap-4" key={`skeleton-${i}`}>
+                      <div className=' bg-gray-200 rounded w-20 h-20 ' />
+                      <div className=' bg-gray-200 rounded w-20 h-20 ' />
+                      <div className=' bg-gray-200 rounded w-20 h-20 ' />
+                    </div>
+                  ))}
+                </div>
+              }
+            >
+              <Await resolve={data.recommendedProducts}>
+                {(response: RecommendedProductsQuery | null) => (
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+                    {
+                      response?.products.nodes.map((product) => (
+                        <ProductItem key={product.id} product={product} loading='lazy' hidePrice />
+                      ))
+                    }
+                  </div>
+                )}
+              </Await>
+            </Suspense>
+          </div>
+        </div>
+      </section>
+      {/* craftmanship section */}
+      <section className='py-20 px-4'>
+        <div className='container mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center '>
+            <div className=''>
+              <Image alt='Craft' className='w-full' data={{
+                url: '/image/shoes-craft.png'
+              }}
+              sizes='(max-with: 768px) 100vw, (max-width: 1200px) 50vw, 33vw '
+              />
+            </div>
+            <div className='max-w-full'>
+              <h2 className='text-3xl mb-6'>
+                Crafted by Master
+              </h2>
+              <p className='text-gray-600 mb-8 leading-relaxed'> 
+
+              </p>
+              <Link to='/pages/our-craft' className='inline-flex items-center text-brand-navy font-medium hover:text-brand-gold transition-colors duration-300'>
+              Discovered Our Proccess
+              <ArrowRight className='ml-2 w-5 h-5' />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* test */}
+      <section className='py-20 px-4 bg-brand-navy text-white'>
+        <div className='container mx-auto max-w-4xl text-center'>
+            <div className='flex justify-center'>
+                {
+                  Array.from({length: 5}).map((_, i) => (
+                    <Star key={`start-${i}`} fill='#C3A343' color="#C3A343" className='w-8 h-8 mb-8' />
+                  ))
+                }
+            </div>
+            <blockquote className='text-2xl md:text-3xl italic mb-8 max-w-2xl mx-auto'>
+              "The attention to detail is simply remarkable. Every stitch and seam tells a story of dedication and craftsmanship."
+            </blockquote>
+            <cite className='text-gray-300 not-italic'>
+              - The Luxury Shoemakerr Report
+            </cite>
+        </div>
+      </section>
     </div>
   );
 }
@@ -95,7 +203,7 @@ function RecommendedProducts({
 }) {
   return (
     <div className="recommended-products">
-      <h2 className='text-brand-gold'>Recommended Products</h2>
+      <h2 className="text-brand-gold">Recommended Products</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
@@ -138,29 +246,12 @@ const FEATURED_COLLECTION_QUERY = `#graphql
 ` as const;
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    featuredImage {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
+  ${PRODUCT_ITEM_FRAGMENT}
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     products(first: 4, sortKey: UPDATED_AT, reverse: true) {
       nodes {
-        ...RecommendedProduct
+        ...ProductItem
       }
     }
   }
