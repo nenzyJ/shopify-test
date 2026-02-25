@@ -58,7 +58,7 @@ export function Header({
       <div
         className={`overflow-hidden transition-all duration-500 ease-in-out bg-brand-navy text-white ${scrolled ? 'max-h-0' : 'max-h-12'}`}
       >
-        <div className="container mx-auto text-center py-2.5 px-4">
+        <div className="max-w-[1440px] w-full mx-auto text-center py-2.5 px-6 md:px-12 lg:px-20">
           <p className="font-source text-[13px] leading-tight sm:text-sm font-light tracking-wider">
             Complimentary Shipping on Order Above $500
           </p>
@@ -68,7 +68,7 @@ export function Header({
       <header
         className={`transition-all duration-500 ease-in-out border-b ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm border-transparent' : 'bg-white border-gray-100'}`}
       >
-        <div className="container mx-auto">
+        <div className="max-w-[1440px] w-full mx-auto">
           {/* mob logo (550px and bellow) */}
           <div
             className={`hidden max-[550px]:block text-center border-b border-gray-100 transition-all duration-300 ease-in-out ${scrolled ? 'px-1' : 'px-2'}`}
@@ -91,7 +91,7 @@ export function Header({
           </div>
           {/* header content */}
           <div
-            className={`flex items-center justify-between px-4 sm:px-6 transition-all duration-300 ease-in-out ${scrolled ? 'py-3 sm:py-4' : 'sm:py-4'}`}
+            className={`flex items-center justify-between px-6 md:px-12 lg:px-20 transition-all duration-300 ease-in-out ${scrolled ? 'py-3 sm:py-4' : 'sm:py-4'}`}
           >
             {/* Mobile menu */}
             <div className="lg:hidden">
